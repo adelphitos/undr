@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>UNDR — NYC Founders Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+@page{size:A4;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:210mm;height:297mm;background:#fff;color:#111;font-family:Inter,system-ui,sans-serif;font-size:8.7pt;line-height:1.34;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;padding:0;overflow:hidden;display:flex;flex-direction:column}
+.top{background:#0a0a0f;color:#fff;padding:7mm 11mm 6mm;display:flex;gap:8mm;align-items:flex-end}
+.top .l{flex:1}
+.brand{font-family:Unbounded,sans-serif;font-weight:900;font-size:12pt;letter-spacing:-.03em;display:flex;align-items:center;gap:6px;color:#c8ff2e}
+.brand i{width:9px;height:9px;border-radius:50%;background:#c8ff2e;display:inline-block;box-shadow:0 0 10px #c8ff2e}
+h1{font-family:Unbounded,sans-serif;font-weight:900;font-size:18pt;line-height:1.05;letter-spacing:-.03em;margin:4mm 0 2mm}
+h1 em{font-style:normal;color:#c8ff2e}
+.top p{color:#b9b9c8;font-size:9pt;max-width:120mm}
+.meta{text-align:right;font-size:8pt;color:#9b9bb0;line-height:1.5}
+.meta b{color:#fff;font-size:9pt;display:block}
+.body{flex:1;padding:5mm 11mm 3mm;display:grid;grid-template-columns:1.15fr 1fr;gap:6mm}
+h2{font-family:Unbounded,sans-serif;font-size:8pt;letter-spacing:.06em;text-transform:uppercase;color:#0a0a0f;margin:0 0 1.5mm;padding-bottom:1mm;border-bottom:2px solid #c8ff2e;display:inline-block}
+section{margin-bottom:2.8mm}
+p{margin-bottom:1.6mm}
+ul{padding-left:3.6mm;margin-bottom:1.5mm}
+li{margin-bottom:.9mm}
+b{font-weight:700}
+.shot{border:1px solid #ddd;border-radius:3mm;overflow:hidden;box-shadow:0 4mm 10mm rgba(0,0,0,.12);margin-bottom:2.5mm}
+.shot img{display:block;width:100%}
+.cap{font-size:7.6pt;color:#666;margin-bottom:3.5mm}
+.links{background:#f4f6ea;border:1px solid #dfe7c3;border-radius:2.5mm;padding:3mm 3.5mm;font-size:8.6pt}
+.links b{display:block;font-family:Unbounded,sans-serif;font-size:7.5pt;letter-spacing:.05em;margin-bottom:1mm}
+.links a{color:#111;text-decoration:none;font-weight:600}
+.links div{margin-bottom:.8mm}
+.pill{display:inline-block;background:#0a0a0f;color:#c8ff2e;border-radius:999px;padding:.4mm 2mm;font-size:7pt;font-weight:800;margin-right:1mm}
+.foot{padding:0 11mm 5mm;font-size:7.4pt;color:#777;display:flex;justify-content:space-between}
+</style></head><body><div class="page">
+<div class="top"><div class="l"><div class="brand"><i></i>UNDR</div>
+<h1>NYC after dark.<br><em>No fake ID needed.</em></h1>
+<p>A live map of the places in New York that actually let you in at 18, verified from each venue's own fine print and confirmed at the door by people under 21.</p></div>
+<div class="meta"><b>Antariksh Gupta</b>NYC Founders Challenge<br>Tetr College of Business<br>October 22, 2026</div></div>
+<div class="body">
+<div>
+<section><h2>The problem</h2>
+<p>I'm 19. For two months in New York, every bar, club, rooftop and most comedy clubs told me to go home, because the drinking age makes the whole social layer of the city 21+. The frustrating part is that it isn't actually true: live music venues run 16+ and 18+ shows, jazz clubs are all ages, museums stay open late for free, arcades and karaoke rooms don't check ID. That information lives in ticket fine print and venue FAQs, so a 19-year-old never knows where they'll get in and gives up. NYC has roughly 600,000 college students, plus exchange cohorts and interns from countries where 18 is adult. We all hit the same wall in week one.</p></section>
+<section><h2>The solution</h2>
+<p><b>UNDR</b> shows only what opens its doors at 18, tonight, on a map. Each spot carries its door policy, the source for it, and a count of people under 21 who confirmed they got in. The "Show 21+" toggle greys out the locked city so the gap is visible. On top of that: a <b>live feed of real NYC Parks events</b> from NYC Open Data (194 this week, all free), a <b>plan builder</b> that assembles a three-stop night under a budget with subway times between stops, a <b>voice concierge</b> you can talk to ("Can I get into House of Yes?" gets a straight no and the closest open alternative), and an <b>"I got in" / "turned away"</b> loop that keeps the data honest.</p></section>
+<section><h2>Why it's a business</h2>
+<p>Venues have empty weeknights and ignore a demographic that can't drink but does pay for tickets, food and karaoke. UNDR sells promoted weeknight listings to venues, takes a cut on tickets, and later partners with campuses. The moat is the data nobody else collects: verified door policies plus real-world confirmations from under-21s.</p></section>
+<section><h2>My process</h2>
+<ul><li>Kept a list of every place that let me in during the semester and noticed the pattern: the policies existed but were hidden.</li>
+<li>Brainstormed 30 pain points with AI, checked the top five for competitors. NYC nightlife apps exist (Intoit, The Scene); none are age-specific.</li>
+<li>Built the first version in an afternoon, tested every flow in the browser on desktop and phone, then wired in open data, a database and deployment.</li></ul></section>
+<section><h2>AI toolkit, honestly</h2>
+<ul><li><b>Claude (Claude Code):</b> competitor research, all the code, browser testing, Supabase schema and Vercel deployment. The in-app concierge also runs on Claude or Gemini.</li>
+<li><b>OpenAI Codex:</b> a parallel prototype I used to compare design directions; I took its idea of using NYC Open Data.</li>
+<li><b>What I did myself:</b> the pain point from lived experience, the venue list and door policies, every product decision (what to verify, the locked view, the confirmation loop), the testing, and this pitch.</li></ul></section>
+</div>
+<div>
+<div class="shot"><img src="app.png" alt="UNDR app screenshot"></div>
+<div class="cap">The live app: tonight's verified spots, the map, and a venue sheet showing door policy, source and confirmations.</div>
+<div class="links"><b>THE BUILD</b>
+<div><span class="pill">LIVE</span><a href="https://undr-nine.vercel.app">undr-nine.vercel.app</a></div>
+<div><span class="pill">CODE</span><a href="https://github.com/adelphitos/undr">github.com/adelphitos/undr</a></div>
+<div><span class="pill">BACKUP</span><a href="https://adelphitos.github.io/undr/">adelphitos.github.io/undr</a></div>
+<div style="margin-top:2mm;font-size:7.8pt;color:#555">Free APIs only: OpenStreetMap tiles, Nominatim geocoding, NYC Open Data, browser geolocation and speech. Supabase stores shared confirmations. Try: tap "Build my night", or ask the concierge "plan a free night in Brooklyn".</div></div>
+<div class="cap" style="margin-top:3mm">What's real and what's seeded: the 28 venues, addresses and door policies are real and hand-checked; the city events are live; the got-in counts and specific concert nights are seeded placeholders to demonstrate the mechanic.</div>
+</div></div>
+<div class="foot"><span>UNDR · NYC for the under-21</span><span>Built in one day for the NYC Founders Challenge</span></div>
+</div></body></html>
