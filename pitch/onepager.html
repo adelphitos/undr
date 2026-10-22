@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>UNDR — NYC Founders Challenge</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>UNDR: NYC Founders Challenge</title>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 @page{size:A4;margin:0}
@@ -33,34 +33,34 @@ b{font-weight:700}
 </style></head><body><div class="page">
 <div class="top"><div class="l"><div class="brand"><i></i>UNDR</div>
 <h1>NYC after dark.<br><em>No fake ID needed.</em></h1>
-<p>A live map of the places in New York that actually let you in at 18, verified from each venue's own fine print and confirmed at the door by people under 21.</p></div>
+<p>A live map of the places in New York that actually let you in at 18, checked against each venue's fine print and confirmed at the door by people under 21.</p></div>
 <div class="meta"><b>Antariksh Gupta</b>NYC Founders Challenge<br>Tetr College of Business<br>October 22, 2026</div></div>
 <div class="body">
 <div>
 <section><h2>The problem</h2>
-<p>I'm 19. For two months in New York, every bar, club, rooftop and most comedy clubs told me to go home, because the drinking age makes the whole social layer of the city 21+. The frustrating part is that it isn't actually true: live music venues run 16+ and 18+ shows, jazz clubs are all ages, museums stay open late for free, arcades and karaoke rooms don't check ID. That information lives in ticket fine print and venue FAQs, so a 19-year-old never knows where they'll get in and gives up. NYC has roughly 600,000 college students, plus exchange cohorts and interns from countries where 18 is adult. We all hit the same wall in week one.</p></section>
+<p>I'm 19. I spent two months living in New York this term and the city basically shut at 10pm for me. Bars, clubs, rooftops, most comedy clubs: all 21+. What annoyed me is that once I started paying attention, a lot of the city does let you in. Bowery Ballroom runs 18+ shows. Smalls, the jazz club, is all ages. The Whitney is free on Friday nights. The karaoke rooms in K-town don't check ID at all. None of that is secret, it just sits in ticket fine print and venue FAQs where nobody my age reads it, so we assume the answer is no and stay in. There are around 600,000 college students in NYC, plus the exchange cohorts and interns who land here from places where 18 is adult. Everyone I know hit this wall in week one.</p></section>
 <section><h2>The solution</h2>
-<p><b>UNDR</b> shows only what opens its doors at 18, tonight, on a map. Each spot carries its door policy, the source for it, and a count of people under 21 who confirmed they got in. The "Show 21+" toggle greys out the locked city so the gap is visible. On top of that: a <b>live feed of real NYC Parks events</b> from NYC Open Data (194 this week, all free), a <b>plan builder</b> that assembles a three-stop night under a budget with subway times between stops, a <b>voice concierge</b> you can talk to ("Can I get into House of Yes?" gets a straight no and the closest open alternative), and an <b>"I got in" / "turned away"</b> loop that keeps the data honest.</p></section>
+<p>UNDR is a map of what opens its doors at 18, tonight. Every spot shows the door policy, where I got it from, and how many under-21s have tapped "I got in". A toggle shows the 21+ places greyed out, so you can see how much of the city is locked. It also pulls real NYC Parks events from NYC Open Data (194 this week, all free), builds a three-stop night under whatever budget you give it with subway times between stops, and has a concierge you can talk to. Ask it "can I get into House of Yes?" and it says no, then tells you where to go instead. If someone gets turned away, they flag it and the listing drops out.</p></section>
 <section><h2>Why it's a business</h2>
-<p>Venues have empty weeknights and ignore a demographic that can't drink but does pay for tickets, food and karaoke. UNDR sells promoted weeknight listings to venues, takes a cut on tickets, and later partners with campuses. The moat is the data nobody else collects: verified door policies plus real-world confirmations from under-21s.</p></section>
+<p>Venues have dead weeknights and ignore the people who can't drink but will still pay for a ticket, dinner and a karaoke room. UNDR charges venues for promoted weeknight listings and takes a cut on tickets. Campus partnerships come after that. What nobody else has is the data: door policies checked against the fine print, plus real confirmations from people under 21.</p></section>
 <section><h2>My process</h2>
-<ul><li>Kept a list of every place that let me in during the semester and noticed the pattern: the policies existed but were hidden.</li>
-<li>Brainstormed 30 pain points with AI, checked the top five for competitors. NYC nightlife apps exist (Intoit, The Scene); none are age-specific.</li>
-<li>Built the first version in an afternoon, tested every flow in the browser on desktop and phone, then wired in open data, a database and deployment.</li></ul></section>
+<ul><li>Kept a note of every place that let me in this semester. The pattern was that the information existed, it was just hidden.</li>
+<li>Brainstormed about 30 pain points with AI and checked the top five for competitors. There are NYC nightlife apps (Intoit, The Scene). None of them care how old you are.</li>
+<li>Built the first version in an afternoon, clicked through every flow on my laptop and my phone, then added the open data feed, a database and the deployment.</li></ul></section>
 <section><h2>AI toolkit, honestly</h2>
-<ul><li><b>Claude (Claude Code):</b> competitor research, all the code, browser testing, Supabase schema and Vercel deployment. The in-app concierge also runs on Claude or Gemini.</li>
-<li><b>OpenAI Codex:</b> a parallel prototype I used to compare design directions; I took its idea of using NYC Open Data.</li>
-<li><b>What I did myself:</b> the pain point from lived experience, the venue list and door policies, every product decision (what to verify, the locked view, the confirmation loop), the testing, and this pitch.</li></ul></section>
+<ul><li>Claude Code did the competitor research, wrote the code, tested it in a browser, set up the Supabase database and deployed to Vercel. The concierge inside the app runs on Claude or Gemini.</li>
+<li>OpenAI Codex built a second prototype so I could compare two designs. I took its idea of using NYC Open Data.</li>
+<li>Me: the problem, because I lived it. The venue list and the door policies. Every product call, like what counts as verified, the locked view and the got-in loop. All the testing, and this pitch.</li></ul></section>
 </div>
 <div>
 <div class="shot"><img src="app.png" alt="UNDR app screenshot"></div>
-<div class="cap">The live app: tonight's verified spots, the map, and a venue sheet showing door policy, source and confirmations.</div>
+<div class="cap">The live app: tonight's verified spots, the map, and a venue sheet with the door policy, its source and confirmations.</div>
 <div class="links"><b>THE BUILD</b>
 <div><span class="pill">LIVE</span><a href="https://undr-nine.vercel.app">undr-nine.vercel.app</a></div>
 <div><span class="pill">CODE</span><a href="https://github.com/adelphitos/undr">github.com/adelphitos/undr</a></div>
 <div><span class="pill">BACKUP</span><a href="https://adelphitos.github.io/undr/">adelphitos.github.io/undr</a></div>
-<div style="margin-top:2mm;font-size:7.8pt;color:#555">Free APIs only: OpenStreetMap tiles, Nominatim geocoding, NYC Open Data, browser geolocation and speech. Supabase stores shared confirmations. Try: tap "Build my night", or ask the concierge "plan a free night in Brooklyn".</div></div>
-<div class="cap" style="margin-top:3mm">What's real and what's seeded: the 28 venues, addresses and door policies are real and hand-checked; the city events are live; the got-in counts and specific concert nights are seeded placeholders to demonstrate the mechanic.</div>
+<div style="margin-top:2mm;font-size:7.8pt;color:#555">Free APIs only: OpenStreetMap tiles, Nominatim geocoding, NYC Open Data, browser geolocation and speech. Supabase stores the shared confirmations. Try "Build my night", or ask the concierge to plan a free night in Brooklyn.</div></div>
+<div class="cap" style="margin-top:3mm">What's real and what's seeded: the 28 venues, addresses and door policies are real and I checked them. The city events are live. The got-in counts and the specific concert nights are placeholders to show the mechanic.</div>
 </div></div>
 <div class="foot"><span>UNDR · NYC for the under-21</span><span>Built in one day for the NYC Founders Challenge</span></div>
 </div></body></html>
