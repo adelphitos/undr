@@ -629,7 +629,7 @@ async function recordFlag(s){if(supa){try{await supa.post('flags',{spot_id:s.id}
 const GEMINI_KEY=window.UNDR_GEMINI_KEY||localStorage.getItem('undr.gemini')||'';
 let sampleFn=null,backend='local',voiceOn=false;const turns=[];
 const beLabel=()=>{document.getElementById('backend').textContent={claude:'powered by Claude',gemini:'powered by Gemini',local:'offline brain'}[backend]};
-(async()=>{if(window.claude?.use){try{sampleFn=await claude.use('sample')}catch{}}if(sampleFn)backend='claude';else if(GEMINI_KEY)backend='gemini';else{try{const r=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});if(r.ok)backend='gemini'}catch{}}beLabel()})();
+(async()=>{if(window.claude?.use){try{sampleFn=await claude.use('sample')}catch{}}if(sampleFn)backend='claude';else if(GEMINI_KEY)backend='gemini';else{try{const r=await fetch('/api/chat');const j=r.ok?await r.json():null;if(j?.ok)backend='gemini'}catch{}}beLabel()})();
 const ctxListings=()=>EVENTS.filter(e=>e.d<=2).sort((a,b)=>(a.live-b.live)||(b.gotIn-a.gotIn)).slice(0,60).map(e=>`${e.id}|${e.dayLabel} ${e.timeLabel}|${e.title}|${e.name}, ${e.hood} (${e.boro})|${CATNAME[e.cat]}|${e.age}|${e.priceLabel}`).join('\n');
 const RULES=()=>`You are UNDR, a sharp, warm NYC night concierge for people aged 18 to 20 who get turned away from every 21+ bar and club. Today is ${new Date().toDateString()}.
 LISTINGS (id|when|title|venue, hood (borough)|vibe|door policy|price):
@@ -652,7 +652,7 @@ function localAnswer(q){const t=q.toLowerCase();
 async function askModel(q,bubble){const hist=[...turns,{role:'user',content:q}].slice(-8);
   if(backend==='claude'&&sampleFn){try{const{text}=await sampleFn([{role:'user',content:RULES()},...hist],{cache:false,modelTier:'quick',onText:({text})=>{bubble.textContent=stripShow(text);bubble.classList.remove('think')}});return text}catch(e){if(['not_granted','sampling_disabled','not_declared','capability_disabled'].includes(e.code)){backend=GEMINI_KEY?'gemini':'local';beLabel()}else if(e.code==='rate_limited'){toast('Claude is rate-limited for you right now, switching to the offline brain')}}}
   if(backend==='gemini'){try{let text='';if(GEMINI_KEY){const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_KEY}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:RULES()}]},...hist.map(t=>({role:t.role==='assistant'?'model':'user',parts:[{text:t.content}]}))],generationConfig:{temperature:.7,maxOutputTokens:400}})});const j=await r.json();text=j.candidates?.[0]?.content?.parts?.map(p=>p.text).join('')||''}
-    else{const r=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({rules:RULES(),turns:hist})});const j=await r.json();text=j.text||''}
+    else{const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),22000);const r=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({rules:RULES(),turns:hist}),signal:ctl.signal});clearTimeout(tm);const j=await r.json();text=j.text||'';if(!text&&j.error)toast('Gemini is busy right now, using the offline brain')}
     if(text)return text}catch{}}
   const l=localAnswer(q);return l.text+'\nSHOW: '+(l.ids.length?l.ids.join(', '):'none')}
 const stripShow=t=>t.replace(/\n?\s*SHOW:.*$/is,'').trim();
