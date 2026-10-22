@@ -628,14 +628,16 @@ async function recordFlag(s){if(supa){try{await supa.post('flags',{spot_id:s.id}
 // ---------- concierge: Claude (artifact) → /api/chat (Gemini) → Gemini direct (key) → local engine ----------
 const GEMINI_KEY=window.UNDR_GEMINI_KEY||localStorage.getItem('undr.gemini')||'';
 let sampleFn=null,backend='local',voiceOn=false;const turns=[];
-const beLabel=()=>{document.getElementById('backend').textContent={claude:'powered by Claude',gemini:'powered by Gemini',local:'offline brain'}[backend]};
+let geminiRetryAt=0;const beLabel=()=>{document.getElementById('backend').textContent=backend==='gemini'&&Date.now()<geminiRetryAt?'offline brain · Gemini busy':{claude:'powered by Claude',gemini:'powered by Gemini',local:'offline brain'}[backend]};
 (async()=>{if(window.claude?.use){try{sampleFn=await claude.use('sample')}catch{}}if(sampleFn)backend='claude';else if(GEMINI_KEY)backend='gemini';else{try{const r=await fetch('/api/chat');const j=r.ok?await r.json():null;if(j?.ok)backend='gemini'}catch{}}beLabel()})();
 const ctxListings=()=>EVENTS.filter(e=>e.d<=2).sort((a,b)=>(a.live-b.live)||(b.gotIn-a.gotIn)).slice(0,60).map(e=>`${e.id}|${e.dayLabel} ${e.timeLabel}|${e.title}|${e.name}, ${e.hood} (${e.boro})|${CATNAME[e.cat]}|${e.age}|${e.priceLabel}`).join('\n');
 const RULES=()=>`You are UNDR, a sharp, warm NYC night concierge for people aged 18 to 20 who get turned away from every 21+ bar and club. Today is ${new Date().toDateString()}.
 LISTINGS (id|when|title|venue, hood (borough)|vibe|door policy|price):
 ${ctxListings()}
 Rules: recommend only from LISTINGS. If someone asks about a 21+ place, say plainly it is locked at the door and offer the closest open alternative from the list. Be specific: name, time, price, door policy. Under 70 words, casual, confident, no bullet lists, at most one emoji. If they ask to plan a night, give 2-3 stops in time order. Finish with a final line exactly like "SHOW: id1, id2" naming up to 3 listing ids you recommended, or "SHOW: none".`;
-function localAnswer(q){const t=q.toLowerCase();
+const STOPW=new Set('tonight tomorrow weekend something somewhere anything need want some with that this have free cheap under near plan night nights good best give find show what where around brooklyn manhattan queens after before late early please spot spots place places going like just into from there here buzz vibe vibes feel feeling tonight cool chill fun'.split(' '));
+let lastIds=[];
+function localAnswer(q){const t=q.toLowerCase();const kws=t.replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(w=>w.length>3&&!STOPW.has(w));const hay=e=>(e.name+' '+e.title+' '+e.blurb).toLowerCase();
   const named=SPOTS.filter(s=>{const w=s.name.toLowerCase().replace(/[^a-z0-9 ]/g,'').split(' ').filter(x=>x.length>3);return w.length&&w.every(x=>t.includes(x))});
   if(named.length&&/get in|get into|can i|allowed|let me|21|id|door/.test(t)){const s=named[0];if(s.age==='21+'){const alt=EVENTS.find(e=>e.d===0&&e.cat===s.cat&&e.age!=='21+');return{text:`No. ${s.name} is 21+ at the door, every night, no exceptions. ${alt?`Closest thing that will let you in tonight: ${alt.title} at ${alt.name} in ${alt.hood}, ${alt.timeLabel.split(' – ')[0]}, ${alt.priceLabel}, ${alt.age}.`:'Try the Jazz or Comedy filter for tonight.'}`,ids:alt?[alt.id]:[]}}
     const e=EVENTS.find(x=>x.id===s.id)||s;return{text:`Yes. ${s.name} is ${s.age}, so you are good. ${e.dayLabel?e.dayLabel+' '+e.timeLabel.split(' – ')[0]+', ':''}${s.priceLabel}. ${s.gotIn} people under 21 got in recently.`,ids:[s.id]}}
@@ -645,15 +647,20 @@ function localAnswer(q){const t=q.toLowerCase();
   const m=t.match(/under \$?(\d+)|\$(\d+)/);if(m)pool=pool.filter(e=>e.price<=+(m[1]||m[2]));
   const boro=/brooklyn|bushwick|williamsburg|greenpoint/.test(t)?'Brooklyn':/queens|astoria|flushing/.test(t)?'Queens':/manhattan|village|downtown|midtown|chelsea|les/.test(t)?'Manhattan':null;if(boro)pool=pool.filter(e=>e.boro===boro);
   if(/late|after 11|after midnight|2am|3am/.test(t))pool=pool.filter(e=>e.end.getHours()<6||e.end.getHours()>=23);
-  pool=[...new Map(pool.map(e=>[e.id,e])).values()].sort((a,b)=>b.gotIn-a.gotIn).slice(0,3);
-  if(!pool.length)return{text:'Nothing matches that exactly. Loosen it up: try "tonight", a vibe like comedy or jazz, or "free".',ids:[]};
+  let miss='';if(kws.length&&!cat){const hits=pool.filter(e=>kws.some(k=>hay(e).includes(k)));if(hits.length)pool=hits;else{const any=EVENTS.filter(e=>e.age!=='21+'&&kws.some(k=>hay(e).includes(k)));if(any.length)pool=any;else miss=kws[0]}}
+  let uniq=[...new Map(pool.map(e=>[e.id,e])).values()].sort((a,b)=>b.gotIn-a.gotIn);
+  let repeat=false,same=false;if(lastIds.length&&uniq.slice(0,3).every(e=>lastIds.includes(e.id))){if(uniq.length>3){uniq=uniq.filter(e=>!lastIds.includes(e.id));repeat=true}else same=true}
+  pool=uniq.slice(0,3);
+  if(!pool.length)return{text:miss?`I don't have anything tagged "${miss}" on my list yet. Try a vibe (comedy, jazz, late eats) or "free", and if you know a spot that lets 18+ in, drop it with "Add a spot".`:'Nothing matches that exactly. Loosen it up: try "tonight", a vibe like comedy or jazz, or "free".',ids:[]};
+  lastIds=pool.map(e=>e.id);
   const when=day===1?'Tomorrow':day===-1?'This weekend':'Tonight';
-  return{text:`${when}, this is where I would go: `+pool.map((e,i)=>`${i+1}) ${e.title} at ${e.name}, ${e.hood}, ${e.timeLabel.split(' – ')[0]}, ${e.priceLabel}, ${e.age}`).join('. ')+'. All of these let you in at 18.',ids:pool.map(e=>e.id)}}
+  const lead=miss?`No "${miss}" spots on my list yet, so closest I've got ${when.toLowerCase()}: `:same?`Same picks as before, that's all I've got for that: `:repeat?`Different from last time, ${when.toLowerCase()}: `:`${when}, this is where I would go: `;
+  return{text:lead+pool.map((e,i)=>`${i+1}) ${e.title} at ${e.name}, ${e.hood}, ${e.timeLabel.split(' – ')[0]}, ${e.priceLabel}, ${e.age}`).join('. ')+'. All of these let you in at 18.',ids:pool.map(e=>e.id)}}
 async function askModel(q,bubble){const hist=[...turns,{role:'user',content:q}].slice(-8);
   if(backend==='claude'&&sampleFn){try{const{text}=await sampleFn([{role:'user',content:RULES()},...hist],{cache:false,modelTier:'quick',onText:({text})=>{bubble.textContent=stripShow(text);bubble.classList.remove('think')}});return text}catch(e){if(['not_granted','sampling_disabled','not_declared','capability_disabled'].includes(e.code)){backend=GEMINI_KEY?'gemini':'local';beLabel()}else if(e.code==='rate_limited'){toast('Claude is rate-limited for you right now, switching to the offline brain')}}}
-  if(backend==='gemini'){try{let text='';if(GEMINI_KEY){const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_KEY}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:RULES()}]},...hist.map(t=>({role:t.role==='assistant'?'model':'user',parts:[{text:t.content}]}))],generationConfig:{temperature:.7,maxOutputTokens:400}})});const j=await r.json();text=j.candidates?.[0]?.content?.parts?.map(p=>p.text).join('')||''}
+  if(backend==='gemini'&&Date.now()>=geminiRetryAt){try{let text='';if(GEMINI_KEY){const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_KEY}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:RULES()}]},...hist.map(t=>({role:t.role==='assistant'?'model':'user',parts:[{text:t.content}]}))],generationConfig:{temperature:.7,maxOutputTokens:400}})});const j=await r.json();text=j.candidates?.[0]?.content?.parts?.map(p=>p.text).join('')||''}
     else{const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),22000);const r=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({rules:RULES(),turns:hist}),signal:ctl.signal});clearTimeout(tm);const j=await r.json();text=j.text||'';if(!text&&j.error)toast('Gemini is busy right now, using the offline brain')}
-    if(text)return text}catch{}}
+    if(text)return text;geminiRetryAt=Date.now()+120000;beLabel()}catch{geminiRetryAt=Date.now()+120000;beLabel()}}
   const l=localAnswer(q);return l.text+'\nSHOW: '+(l.ids.length?l.ids.join(', '):'none')}
 const stripShow=t=>t.replace(/\n?\s*SHOW:.*$/is,'').trim();
 function spotlight(ids){S.spot=ids.length?new Set(ids):null;S.sel=null;if(S.spot){S.when='all';document.querySelectorAll('#whenG .chip').forEach(x=>x.classList.toggle('on',x.dataset.when==='all'))}render();

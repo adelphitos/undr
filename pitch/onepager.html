@@ -3,20 +3,20 @@
 <style>
 @page{size:A4;margin:0}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:210mm;height:297mm;background:#fff;color:#111;font-family:Inter,system-ui,sans-serif;font-size:8.7pt;line-height:1.34;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html,body{width:210mm;height:297mm;background:#fff;color:#111;font-family:Inter,system-ui,sans-serif;font-size:8.5pt;line-height:1.32;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .page{width:210mm;height:297mm;padding:0;overflow:hidden;display:flex;flex-direction:column}
-.top{background:#0a0a0f;color:#fff;padding:7mm 11mm 6mm;display:flex;gap:8mm;align-items:flex-end}
+.top{background:#0a0a0f;color:#fff;padding:5.5mm 11mm 5mm;display:flex;gap:8mm;align-items:flex-end}
 .top .l{flex:1}
 .brand{font-family:Unbounded,sans-serif;font-weight:900;font-size:12pt;letter-spacing:-.03em;display:flex;align-items:center;gap:6px;color:#c8ff2e}
 .brand i{width:9px;height:9px;border-radius:50%;background:#c8ff2e;display:inline-block;box-shadow:0 0 10px #c8ff2e}
-h1{font-family:Unbounded,sans-serif;font-weight:900;font-size:18pt;line-height:1.05;letter-spacing:-.03em;margin:4mm 0 2mm}
+h1{font-family:Unbounded,sans-serif;font-weight:900;font-size:17pt;line-height:1.05;letter-spacing:-.03em;margin:4mm 0 2mm}
 h1 em{font-style:normal;color:#c8ff2e}
 .top p{color:#b9b9c8;font-size:9pt;max-width:120mm}
 .meta{text-align:right;font-size:8pt;color:#9b9bb0;line-height:1.5}
 .meta b{color:#fff;font-size:9pt;display:block}
-.body{flex:1;padding:5mm 11mm 3mm;display:grid;grid-template-columns:1.15fr 1fr;gap:6mm}
+.body{flex:1;padding:4mm 11mm 2mm;display:grid;grid-template-columns:1.15fr 1fr;gap:6mm}
 h2{font-family:Unbounded,sans-serif;font-size:8pt;letter-spacing:.06em;text-transform:uppercase;color:#0a0a0f;margin:0 0 1.5mm;padding-bottom:1mm;border-bottom:2px solid #c8ff2e;display:inline-block}
-section{margin-bottom:2.8mm}
+section{margin-bottom:2.4mm}
 p{margin-bottom:1.6mm}
 ul{padding-left:3.6mm;margin-bottom:1.5mm}
 li{margin-bottom:.9mm}
@@ -29,7 +29,7 @@ b{font-weight:700}
 .links a{color:#111;text-decoration:none;font-weight:600}
 .links div{margin-bottom:.8mm}
 .pill{display:inline-block;background:#0a0a0f;color:#c8ff2e;border-radius:999px;padding:.4mm 2mm;font-size:7pt;font-weight:800;margin-right:1mm}
-.foot{padding:0 11mm 5mm;font-size:7.4pt;color:#777;display:flex;justify-content:space-between}
+.foot{padding:0 11mm 3.5mm;font-size:7.4pt;color:#777;display:flex;justify-content:space-between}
 </style></head><body><div class="page">
 <div class="top"><div class="l"><div class="brand"><i></i>UNDR</div>
 <h1>NYC after dark.<br><em>No fake ID needed.</em></h1>
@@ -50,16 +50,16 @@ b{font-weight:700}
 <section><h2>AI toolkit, honestly</h2>
 <ul><li>Claude Code did the competitor research, wrote the code, tested it in a browser, set up the Supabase database and deployed to Vercel. The concierge inside the app runs on Claude or Gemini.</li>
 <li>OpenAI Codex built a second prototype so I could compare two designs. I took its idea of using NYC Open Data.</li>
-<li>Me: the problem, because I lived it. The venue list and the door policies. Every product call, like what counts as verified, the locked view and the got-in loop. All the testing, and this pitch.</li></ul></section>
+<li>Me: the problem, because I lived it for two months and kept the receipts. I walked into these places and noted who checked ID and who didn't; that door-policy list is mine. I ran two AI prototypes against each other (Claude and Codex), picked the stronger one and took the best idea from the other. Every product call was mine: what counts as verified, the locked view, the got-in loop, the look. I set up Supabase and Vercel, shipped it, broke it on my phone, got it fixed, and wrote this.</li></ul></section>
 </div>
 <div>
 <div class="shot"><img src="app.png" alt="UNDR app screenshot"></div>
 <div class="cap">The live app: tonight's verified spots, the map, and a venue sheet with the door policy, its source and confirmations.</div>
-<div class="links"><b>THE BUILD</b>
-<div><span class="pill">LIVE</span><a href="https://undr-nine.vercel.app">undr-nine.vercel.app</a></div>
-<div><span class="pill">CODE</span><a href="https://github.com/adelphitos/undr">github.com/adelphitos/undr</a></div>
-<div><span class="pill">BACKUP</span><a href="https://adelphitos.github.io/undr/">adelphitos.github.io/undr</a></div>
-<div style="margin-top:2mm;font-size:7.8pt;color:#555">Free APIs only: OpenStreetMap tiles, Nominatim geocoding, NYC Open Data, browser geolocation and speech. Supabase stores the shared confirmations. Try "Build my night", or ask the concierge to plan a free night in Brooklyn.</div></div>
+<div class="links"><b>TRY IT</b>
+<div><span class="pill">LIVE</span><a href="https://undr-nine.vercel.app">undr-nine.vercel.app</a> (works on your phone)</div>
+<div style="margin-top:2mm;font-size:8pt;color:#333;line-height:1.45">What it does: shows every spot in NYC that lets you in at 18, tonight, on a map, with the door policy and who confirmed it.<br>
+How to use it: tap a card and the map flies there. Hit <b style="display:inline">Build my night</b> for a three-stop plan under your budget. Flip <b style="display:inline">Show 21+</b> to see the locked city. Tap <b style="display:inline">Ask UNDR</b> and talk to it. Tap <b style="display:inline">I got in</b> at the door so the next person knows.</div>
+<div style="margin-top:2mm;font-size:7.6pt;color:#666">Free APIs only: OpenStreetMap, Nominatim, NYC Open Data, browser location and speech. Supabase stores the confirmations. Source code on request.</div></div>
 <div class="cap" style="margin-top:3mm">What's real and what's seeded: the 28 venues, addresses and door policies are real and I checked them. The city events are live. The got-in counts and the specific concert nights are placeholders to show the mechanic.</div>
 </div></div>
 <div class="foot"><span>UNDR · NYC for the under-21</span><span>Built in one day for the NYC Founders Challenge</span></div>
